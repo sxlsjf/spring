@@ -1,6 +1,7 @@
 package com.mygroup.sxl.service.impl;
 
 import com.mygroup.sxl.service.IHelloService;
+import org.springframework.stereotype.Service;
 
 /**
  * @Author: shenxl
@@ -8,6 +9,7 @@ import com.mygroup.sxl.service.IHelloService;
  * @Version 1.0
  * @description：${description}
  */
+@Service
 public class HelloServiceImpl implements IHelloService {
     @Override
     public void sayHello(String say) {

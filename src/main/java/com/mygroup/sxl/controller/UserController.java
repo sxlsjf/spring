@@ -1,6 +1,10 @@
 package com.mygroup.sxl.controller;
 
-import org.springframework.stereotype.Controller;
+import com.mygroup.sxl.service.IHelloService;
+import com.mygroup.sxl.service.impl.HelloServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @Author: shenxl
@@ -8,8 +12,18 @@ import org.springframework.stereotype.Controller;
  * @Version 1.0
  * @description：${description}
  */
-@Controller
+@RestController
 public class UserController {
 
+    @Autowired
+    private IHelloService iHelloService;
+
+    @RequestMapping("/index")
+    public String say(){
+
+        iHelloService.eat("apple");
+
+        return "成功";
+    }
 
 }

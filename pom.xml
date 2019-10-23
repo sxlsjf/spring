@@ -29,6 +29,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!--<dependency>
+			<artifactId>derta-spring-boot-stater-autoconfiguration</artifactId>
+			<groupId>org.sxl</groupId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>-->
 	</dependencies>
 
 	<build>
