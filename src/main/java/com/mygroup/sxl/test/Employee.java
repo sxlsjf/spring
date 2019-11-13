@@ -1,5 +1,8 @@
 package com.mygroup.sxl.test;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import lombok.Data;
+
 import java.math.BigDecimal;
 
 /**
@@ -8,12 +11,17 @@ import java.math.BigDecimal;
  * @Version 1.0
  * @description：${description}
  */
+@Data
+@XStreamAlias("employee")
 public class Employee {
 
+    @XStreamAlias("name")
     private String name;
+    @XStreamAlias("age")
     private Integer age;
+    @XStreamAlias("sex")
     private char sex;
-
+    @XStreamAlias("salary")
     private BigDecimal salary;
 
     public Employee() {
@@ -32,35 +40,13 @@ public class Employee {
         this.salary = salary;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public char getSex() {
-        return sex;
-    }
-
-    public void setSex(char sex) {
-        this.sex = sex;
-    }
-
-    public BigDecimal getSalary() {
-        return salary;
-    }
-
-    public void setSalary(BigDecimal salary) {
-        this.salary = salary;
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", sex=" + sex +
+                ", salary=" + salary +
+                '}';
     }
 }

@@ -1,4 +1,4 @@
-package com.mygroup.sxl.test;
+package com.mygroup.sxl.pdf;
 import java.util.Date;
 import com.mygroup.sxl.domain.Sender;
 import com.mygroup.sxl.domain.Receiver;
@@ -13,6 +13,7 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.mygroup.sxl.domain.LabelRequest;
+import com.mygroup.sxl.other.KdGoldAPIUtils;
 
 import java.io.FileInputStream;
 

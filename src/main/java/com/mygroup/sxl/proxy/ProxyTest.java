@@ -1,4 +1,4 @@
-package com.mygroup.sxl.test;
+package com.mygroup.sxl.proxy;
 
 import com.mygroup.sxl.service.IHelloService;
 import com.mygroup.sxl.service.impl.HelloServiceImpl;

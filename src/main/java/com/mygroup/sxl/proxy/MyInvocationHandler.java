@@ -1,4 +1,4 @@
-package com.mygroup.sxl.test;
+package com.mygroup.sxl.proxy;
 
 import com.mygroup.sxl.service.IHelloService;
 import com.mygroup.sxl.service.impl.HelloServiceImpl;
@@ -9,7 +9,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.nio.file.Files;
-import java.sql.Driver;
 
 /**
  * @Author: shenxl
@@ -27,6 +26,7 @@ public class MyInvocationHandler implements InvocationHandler {
     }
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+
         Object result = null;
         System.out.println("执行方法之前");
         result = method.invoke(target, args);

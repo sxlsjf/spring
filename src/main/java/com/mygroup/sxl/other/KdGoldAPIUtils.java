@@ -1,4 +1,4 @@
-package com.mygroup.sxl.test;
+package com.mygroup.sxl.other;
 
 import java.io.BufferedReader;
 import java.io.IOException;
