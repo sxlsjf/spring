@@ -11,16 +11,16 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 
 	ChannelHandlerContext ctx;
 	/**
-	 * tcpÁ´Â·¼òÀú³É¹¦ºóµ÷ÓÃ
+	 * tcpé“¾è·¯ç®€å†æˆåŠŸåè°ƒç”¨
 	 */
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		this.ctx = ctx;
-		sendMsg("¿Í»§¶ËÏûÏ¢");
+		sendMsg("å®¢æˆ·ç«¯æ¶ˆæ¯");
 	}
 
 	public boolean sendMsg(String msg){
-		System.out.println("¿Í»§¶Ë·¢ËÍÏûÏ¢£º"+msg);
+		System.out.println("å®¢æˆ·ç«¯å‘é€æ¶ˆæ¯ï¼š"+msg);
 		byte[] req = msg.getBytes();
 		ByteBuf m = Unpooled.buffer(req.length);
 		m.writeBytes(req);
@@ -29,7 +29,7 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 	}
 
 	/**
-	 * ÊÕµ½·şÎñÆ÷ÏûÏ¢ºóµ÷ÓÃ
+	 * æ”¶åˆ°æœåŠ¡å™¨æ¶ˆæ¯åè°ƒç”¨
 	 * @throws UnsupportedEncodingException
 	 */
 	@Override
@@ -38,10 +38,10 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 		byte[] req = new byte[buf.readableBytes()];
 		buf.readBytes(req);
 		String body = new String(req,"utf-8");
-		System.out.println("·şÎñÆ÷ÏûÏ¢£º"+body);
+		System.out.println("æœåŠ¡å™¨æ¶ˆæ¯ï¼š"+body);
 	}
 	/**
-	 * ·¢ÉúÒì³£Ê±µ÷ÓÃ
+	 * å‘ç”Ÿå¼‚å¸¸æ—¶è°ƒç”¨
 	 */
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {

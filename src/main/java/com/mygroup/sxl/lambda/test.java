@@ -33,7 +33,7 @@ public class test {
 
 
     public static void test2() {
-        Employee emp = new Employee("Yan", 24, '男', new BigDecimal("1452"));
+        Employee emp = new Employee("Yan", 24, 'k', new BigDecimal("1452"));
         Supplier<String> sup = emp::getName;
 
        /* Supplier<String> sup2 = new Supplier<String>() {

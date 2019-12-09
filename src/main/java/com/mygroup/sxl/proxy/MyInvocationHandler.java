@@ -2,7 +2,7 @@ package com.mygroup.sxl.proxy;
 
 import com.mygroup.sxl.service.IHelloService;
 import com.mygroup.sxl.service.impl.HelloServiceImpl;
-import sun.misc.ProxyGenerator;
+//import sun.misc.ProxyGenerator;
 
 import java.io.File;
 import java.lang.reflect.InvocationHandler;
@@ -49,8 +49,8 @@ public class MyInvocationHandler implements InvocationHandler {
     }
 
     private static void genertor() throws Exception{
-        byte[] bytes= ProxyGenerator.generateProxyClass("HelloService$proxy",new Class[]{IHelloService.class});
-        Files.write(new File("D:\\IdeaProjects\\Spring-boot-Learn-Projects\\sxl\\target\\HelloService$proxy.class").toPath(),bytes);
+   //     byte[] bytes= ProxyGenerator.generateProxyClass("HelloService$proxy",new Class[]{IHelloService.class});
+     //   Files.write(new File("D:\\IdeaProjects\\Spring-boot-Learn-Projects\\sxl\\target\\HelloService$proxy.class").toPath(),bytes);
     }
 
 }

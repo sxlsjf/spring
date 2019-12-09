@@ -11,7 +11,8 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import com.alibaba.fastjson.JSON;
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+//import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+//import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import lombok.extern.slf4j.Slf4j;
 import java.security.MessageDigest;
 
@@ -78,7 +79,8 @@ public class KdGoldAPIUtils {
      * @throws UnsupportedEncodingException
      */
     private static String base64(String str, String charset) throws UnsupportedEncodingException {
-        return Base64.encode(str.getBytes(charset));
+  //      return Base64.encode(str.getBytes(charset));
+        return null;
     }
 
     @SuppressWarnings("unused")

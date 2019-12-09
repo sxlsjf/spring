@@ -34,7 +34,7 @@ public class Server {
                     });
 
             ChannelFuture f = b.bind(port).sync();
-            System.out.println("·þÎñÆ÷¿ªÆô£º"+port);
+            System.out.println("Â·Ã¾ÃŽÃ±Ã†Ã·Â¿ÂªÃ†Ã´Â£Âº"+port);
             f.channel().closeFuture().sync();
         } finally {
             workerGroup.shutdownGracefully();

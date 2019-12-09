@@ -46,7 +46,7 @@ public class XmlTest {
         User user = new User("lanweihong", "lwhhhp@gmail.com");
 
         List<Employee> list=new ArrayList<>();
-        list.add(new Employee("zhangsan",20,'男', BigDecimal.ONE));
+       // list.add(new Employee("zhangsan",20,'男', BigDecimal.ONE));
 
         user.setEmployees(list);
         XStream xStream = new XStream();
