@@ -1,11 +1,16 @@
 package com.mygroup.sxl.future;
 
+import org.apache.zookeeper.Op;
 import org.junit.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @Author: shenxl
@@ -168,5 +173,51 @@ public class TestCompletableFuture {
             // 这里的r为Void（null）了
             System.out.println(r);
         });
+    }
+
+    @Test
+    public void test7(){
+
+        List<Integer> a=new ArrayList<>();
+
+        List<Integer> b=new ArrayList<>();
+        a.add(2);
+        a.add(2);
+        a.add(2);
+        List<Integer> c=new ArrayList<>();
+        List<Integer> d=null;
+        c.add(3);
+        c.add(3);
+        c.add(3);
+
+        a.addAll(b);
+     //   a.addAll(null);
+        a.addAll(c);
+
+        Optional.ofNullable(d).ifPresent(a::addAll);
+        System.out.println(a.size());
+
+
+        Optional.ofNullable(d).ifPresent(x-> x.stream().forEach(System.out::println));
+
+
+
+
+        Integer i=new Integer(5);
+
+        System.out.println(Optional.ofNullable(i).filter(x->x==3));
+
+        List<Integer> e=new ArrayList<>();
+
+        e.stream().forEach(System.out::println);
+
+
+
+
+        System.out.println(Optional.ofNullable(e).map(l->l.stream().filter(x->false).collect(Collectors.toList())).orElse(null));
+
+
+        System.out.println(a.isEmpty());
+
     }
 }

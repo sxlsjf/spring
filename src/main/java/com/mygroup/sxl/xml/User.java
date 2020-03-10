@@ -2,6 +2,7 @@ package com.mygroup.sxl.xml;
 
 import com.mygroup.sxl.test.Employee;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import lombok.Data;
 
 import java.util.List;
@@ -16,6 +17,13 @@ import java.util.List;
 @XStreamAlias("user")
 public class User {
 
+    @XStreamAsAttribute()
+    @XStreamAlias("xmlns:xsi")
+    private String nameSpace;
+
+    @XStreamAsAttribute()
+    @XStreamAlias("xsi:noNamespaceSchemaLocation")
+    private String nameSpace2;
 
     @XStreamAlias("username")
     private String userName;

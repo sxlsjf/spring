@@ -45,6 +45,8 @@ public class XmlTest {
      //XStream默认不会读取这个注解，因为，我们需要声明XStream的注解来源：
         User user = new User("lanweihong", "lwhhhp@gmail.com");
 
+        user.setNameSpace("http://www.w3.org/2001/XMLSchema-instance");
+
         List<Employee> list=new ArrayList<>();
        // list.add(new Employee("zhangsan",20,'男', BigDecimal.ONE));
 
