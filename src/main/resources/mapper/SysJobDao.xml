@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mygroup.sxl.scheduler.dao.SysJobDao">
+
+    <resultMap type="com.mygroup.sxl.scheduler.entity.SysJob" id="SysJobMap">
+        <result property="jobId" column="job_id" jdbcType="INTEGER"/>
+        <result property="beanName" column="bean_name" jdbcType="VARCHAR"/>
+        <result property="methodName" column="method_name" jdbcType="VARCHAR"/>
+        <result property="methodParams" column="method_params" jdbcType="VARCHAR"/>
+        <result property="cronExpression" column="cron_expression" jdbcType="VARCHAR"/>
+        <result property="jobStatus" column="job_status" jdbcType="INTEGER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SysJobMap">
+        select
+          job_id, bean_name, method_name, method_params, cron_expression, job_status, remark, create_time, update_time
+        from test.sys_job
+        where job_id = #{jobId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="SysJobMap">
+        select
+          job_id, bean_name, method_name, method_params, cron_expression, job_status, remark, create_time, update_time
+        from test.sys_job
+        limit #{offset}, #{limit}
+    </select>
+
+    <select id="getSysJobListByStatus" resultMap="SysJobMap" parameterType="_integer">
+         select
+          job_id, bean_name, method_name, method_params, cron_expression, job_status, remark, create_time, update_time
+        from test.sys_job where job_status=#{status,jdbcType=INTEGER}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SysJobMap">
+        select
+          job_id, bean_name, method_name, method_params, cron_expression, job_status, remark, create_time, update_time
+        from test.sys_job
+        <where>
+            <if test="jobId != null">
+                and job_id = #{jobId}
+            </if>
+            <if test="beanName != null and beanName != ''">
+                and bean_name = #{beanName}
+            </if>
+            <if test="methodName != null and methodName != ''">
+                and method_name = #{methodName}
+            </if>
+            <if test="methodParams != null and methodParams != ''">
+                and method_params = #{methodParams}
+            </if>
+            <if test="cronExpression != null and cronExpression != ''">
+                and cron_expression = #{cronExpression}
+            </if>
+            <if test="jobStatus != null">
+                and job_status = #{jobStatus}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="jobId" useGeneratedKeys="true">
+        insert into test.sys_job(bean_name, method_name, method_params, cron_expression, job_status, remark, create_time, update_time)
+        values (#{beanName}, #{methodName}, #{methodParams}, #{cronExpression}, #{jobStatus}, #{remark}, #{createTime}, #{updateTime})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update test.sys_job
+        <set>
+            <if test="beanName != null and beanName != ''">
+                bean_name = #{beanName},
+            </if>
+            <if test="methodName != null and methodName != ''">
+                method_name = #{methodName},
+            </if>
+            <if test="methodParams != null and methodParams != ''">
+                method_params = #{methodParams},
+            </if>
+            <if test="cronExpression != null and cronExpression != ''">
+                cron_expression = #{cronExpression},
+            </if>
+            <if test="jobStatus != null">
+                job_status = #{jobStatus},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where job_id = #{jobId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from test.sys_job where job_id = #{jobId}
+    </delete>
+
+</mapper>

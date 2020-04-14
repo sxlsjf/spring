@@ -2,6 +2,8 @@ package com.mygroup.sxl.controller;
 
 import com.mygroup.sxl.service.IHelloService;
 import com.mygroup.sxl.service.impl.HelloServiceImpl;
+import com.mygroup.sxl.strategy.AsinfoVip;
+import com.mygroup.sxl.strategy.StrategyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
  * @Author: shenxl
  * @Date: 2019/9/20 14:19
  * @Version 1.0
- * @description：${description}
+ * @description
  */
 @RestController
 public class UserController {
@@ -20,8 +22,16 @@ public class UserController {
     @Autowired
     private IHelloService iHelloService;
 
+    @Autowired
+    private StrategyFactory strategyFactory;
+
     @RequestMapping("/index")
     public String say(){
+
+
+        int compute = strategyFactory.getInstance(AsinfoVip.class).compute(10);
+
+        System.out.println("策略工厂："+compute);
 
         iHelloService.eat("apple");
         System.out.println(Thread.currentThread().getName());
