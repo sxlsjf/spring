@@ -3,7 +3,7 @@ package com.mygroup.sxl.enums;
 public enum ExcelPageEnum {
 
     XLS(500, 60_000),
-    XLSX(500, 1_000_000);
+    XLSX(10, 1_000_000);
 
     private int pageSize;
     private int sheetMaxRow;

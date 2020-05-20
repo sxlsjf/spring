@@ -9,7 +9,7 @@ public class Person {
     @Excel(name = "姓名", orderNum = "0")
     private String name;
 
-    @Excel(name = "性别", replace = {"男_1", "女_2"}, orderNum = "1")
+    @Excel(name = "性别",  orderNum = "1")
     private String sex;
 
     @Excel(name = "生日", exportFormat = "yyyy-MM-dd", orderNum = "2")

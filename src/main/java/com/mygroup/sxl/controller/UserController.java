@@ -12,6 +12,7 @@ import com.alibaba.excel.write.metadata.WriteTable;
 import com.mygroup.sxl.mode.Person;
 import com.mygroup.sxl.mode.User;
 import com.mygroup.sxl.service.IHelloService;
+import com.mygroup.sxl.service.JPAPageQueryService;
 import com.mygroup.sxl.utils.EasyExcelUtils;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.time.DateUtils;
@@ -75,8 +76,8 @@ public class UserController {
     }
 
 
-    @RequestMapping("export")
-    public void export(HttpServletResponse response){
+    @RequestMapping("/export2")
+    public void export2(HttpServletResponse response){
 
         //模拟从数据库获取需要导出的数据
         List<Person> personList = new ArrayList<>();
@@ -90,32 +91,33 @@ public class UserController {
         personList.add(person4);
 
         //导出操作
-        EasyExcelUtils.exportExcel(personList,"花名册","草帽一伙",Person.class,"海贼王.xls",response);
+        EasyExcelUtils.exportExcel("title" , "sheetName" ,Person.class, 20, "fileName" ,
+                (currentPage,pageSize)-> personList, response);
     }
 
     @RequestMapping("importExcel")
     public void importExcel(){
-        String filePath = "F:\\海贼王.xls";
+       /* String filePath = "F:\\海贼王.xls";
         //解析excel，
         List<Person> personList = FileUtil.importExcel(filePath,1,1,Person.class);
         //也可以使用MultipartFile,使用 FileUtil.importExcel(MultipartFile file, Integer titleRows, Integer headerRows, Class<T> pojoClass)导入
         System.out.println("导入数据一共【"+personList.size()+"】行");
 
-        //TODO 保存数据库
+        //TODO 保存数据库*/
     }
 
 
-    @RequestMapping("export")
+ /*   @RequestMapping("export")
     public void export(HttpServletResponse response) {
         Map<String, Object> params = new HashMap<>();
         Workbook workbook = bigExcel(1, params, null, new ExportParams("海贼王", "海贼王"), new Page<>());
         ExcelExportUtil.closeExportBigExcel();
         downLoadExcel("海贼王.xls", response, workbook);
-    }
+    }*/
 
 
-    private Workbook bigExcel(int pageNum, Map<String, Object> params, Workbook workbook, ExportParams exportParams, Page<SysUser> page) {
-        //分页查询数据
+   /* private Workbook bigExcel(int pageNum, Map<String, Object> params, Workbook workbook, ExportParams exportParams, Page<SysUser> page) {
+      *//*  //分页查询数据
         page.setCurrent(pageNum);
         page.setSize(1000);
         page.setCondition(params);
@@ -128,8 +130,8 @@ public class UserController {
         if (page.getPages() > pageNum) {
             bigExcel(pageNum + 1, params, workbook, exportParams, page);
         }
-        return workbook;
-    }
+        return workbook;*//*
+    }*/
 
     private void downLoadExcel(String fileName, HttpServletResponse response, Workbook workbook) {
         try {

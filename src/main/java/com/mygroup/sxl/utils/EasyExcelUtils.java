@@ -14,10 +14,12 @@ import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.WriteTable;
 import com.mygroup.sxl.enums.ExcelPageEnum;
+import com.mygroup.sxl.mode.User;
 import com.mygroup.sxl.service.JPAPageQueryService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -57,7 +59,7 @@ public class EasyExcelUtils extends EasyExcel {
 
             for (int j = 0; j < (sheetMaxRow / pageSize); j++) {
                 // must use ++currentPage, mybatis-plus page query current page start 1
-                writer.write(pageQueryService.getData(++currentPage, pageSize), sheet,getTable());
+                writer.write(pageQueryService.getData(++currentPage, pageSize), sheet, getTable());
                 if (currentPage >= pageCount) {
                     break;
                 }
@@ -67,8 +69,8 @@ public class EasyExcelUtils extends EasyExcel {
         writer.finish();
     }
 
-    public static<T> void pageWrite(OutputStream outputStream, Class<T> classHead, Boolean isXls, long totalCount, JPAPageQueryService pageQueryService) {
-        ExcelWriterBuilder excelWriterBuilder = EasyExcel.write(outputStream,classHead).excelType(ExcelTypeEnum.XLSX);
+    public static <T> void pageWrite(OutputStream outputStream, Class<T> classHead, Boolean isXls, long totalCount, JPAPageQueryService pageQueryService) {
+        ExcelWriterBuilder excelWriterBuilder = EasyExcel.write(outputStream, classHead).excelType(ExcelTypeEnum.XLSX);
         int pageSize = ExcelPageEnum.XLSX.getPageSize();
         int sheetMaxRow = ExcelPageEnum.XLSX.getSheetMaxRow();
         if (isXls) {
@@ -79,15 +81,15 @@ public class EasyExcelUtils extends EasyExcel {
 
     }
 
-    public static<T> void pageWrite(HttpServletResponse response,Class<T> classHead, String excelName, long totalCount, JPAPageQueryService pageQueryService) throws Exception {
+    public static <T> void pageWrite(HttpServletResponse response, Class<T> classHead, String excelName, long totalCount, JPAPageQueryService pageQueryService) throws Exception {
         response.setContentType("application/vnd.ms-excel");
         response.setCharacterEncoding("utf-8");
         // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
         String fileName = URLEncoder.encode(excelName, "UTF-8");
         response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
-        OutputStream outputStream=response.getOutputStream();
-        pageWrite(outputStream, classHead,false, totalCount, pageQueryService);
-     //   outputStream.flush();
+        OutputStream outputStream = response.getOutputStream();
+        pageWrite(outputStream, classHead, false, totalCount, pageQueryService);
+        //   outputStream.flush();
     }
 
     public static TableStyle createTableStyle() {
@@ -97,7 +99,7 @@ public class EasyExcelUtils extends EasyExcel {
         // 字体是否加粗
         headFont.setBold(true);
         // 字体大小
-        headFont.setFontHeightInPoints((short)12);
+        headFont.setFontHeightInPoints((short) 12);
         // 字体
         headFont.setFontName("楷体");
         tableStyle.setTableHeadFont(headFont);
@@ -108,15 +110,15 @@ public class EasyExcelUtils extends EasyExcel {
         // 设置表格主体样式
         Font contentFont = new Font();
         contentFont.setBold(true);
-        contentFont.setFontHeightInPoints((short)12);
+        contentFont.setFontHeightInPoints((short) 12);
         contentFont.setFontName("黑体");
         tableStyle.setTableContentFont(contentFont);
         tableStyle.setTableContentBackGroundColor(IndexedColors.GREEN);
         return tableStyle;
     }
 
-    public static WriteTable getTable(){
-        WriteTable table=new WriteTable();
+    public static WriteTable getTable() {
+        WriteTable table = new WriteTable();
         List<List<String>> headList = new ArrayList<>();
         // 第 n 行 的表头
         List<String> headTitle0 = new ArrayList<>();
@@ -135,49 +137,71 @@ public class EasyExcelUtils extends EasyExcel {
         table.setHead(headList);
         return table;
     }
-    public static<T> void exportExcel(List<T> list, String title, String sheetName, Class<T> pojoClass, String fileName, HttpServletResponse response){
-        defaultExport(list, pojoClass, fileName, response, new ExportParams(title, sheetName));
+
+    public static <T> void exportExcel(String title, String sheetName, Class<T> pojoClass, long totalCount, String fileName,
+                                       JPAPageQueryService pageQueryService,HttpServletResponse response) {
+        ExportParams exportParams = new ExportParams(title, sheetName);
+        exportParams.setCreateHeadRows(true);
+        pageWrite2(exportParams, pojoClass, totalCount, pageQueryService,fileName,response);
+
     }
 
-    private static<T> void defaultExport(List<T> list, Class<T> pojoClass, String fileName, HttpServletResponse response, ExportParams exportParams) {
-        Workbook workbook = ExcelExportUtil.exportExcel(exportParams,pojoClass,list);
-        if (workbook != null);
+    public static <T> void pageWrite2(ExportParams exportParams, Class<T> tClass, long totalCount, JPAPageQueryService pageQueryService,
+                                      String fileName, HttpServletResponse response) {
+
+        int pageSize = ExcelPageEnum.XLSX.getPageSize();
+        long pageCount = (totalCount - 1) / pageSize + 1;
+        Workbook workbook = null;
+        for (int currentPageNo = 0; currentPageNo < pageCount; currentPageNo++) {
+            workbook = ExcelExportUtil.exportBigExcel(exportParams, tClass, pageQueryService.getData(currentPageNo, pageSize));
+        }
+        ExcelExportUtil.closeExportBigExcel();
         downLoadExcel(fileName, response, workbook);
+
     }
 
-    private static void downLoadExcel(String fileName, HttpServletResponse response, Workbook workbook) {
+
+    public static void downLoadExcel(String fileName, HttpServletResponse response, Workbook workbook) {
         try {
             response.setCharacterEncoding("UTF-8");
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8")+".xlsx");
             response.setHeader("content-Type", "application/vnd.ms-excel");
-            response.setHeader("Content-Disposition",
-                    "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
             workbook.write(response.getOutputStream());
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
+    public static <T> void exportExcel(List<T> list, String title, String sheetName, Class<T> pojoClass, String fileName, HttpServletResponse response) {
+        defaultExport(list, pojoClass, fileName, response, new ExportParams(title, sheetName));
+    }
+
+    private static <T> void defaultExport(List<T> list, Class<T> pojoClass, String fileName, HttpServletResponse response, ExportParams exportParams) {
+        Workbook workbook = ExcelExportUtil.exportExcel(exportParams, pojoClass, list);
+        if (workbook != null) ;
+        downLoadExcel(fileName, response, workbook);
+    }
 
 
-    public static<T> void exportExcel(List<T> list, String title, String sheetName, Class<T> pojoClass, String fileName, boolean isCreateHeader, HttpServletResponse response){
+    public static <T> void exportExcel(List<T> list, String title, String sheetName, Class<T> pojoClass, String fileName, boolean isCreateHeader, HttpServletResponse response) {
         ExportParams exportParams = new ExportParams(title, sheetName);
         exportParams.setCreateHeadRows(isCreateHeader);
         defaultExport(list, pojoClass, fileName, response, exportParams);
 
     }
 
-    public static void exportExcel(List<Map<String, Object>> list, String fileName, HttpServletResponse response){
+    public static void exportExcel(List<Map<String, Object>> list, String fileName, HttpServletResponse response) {
         defaultExport(list, fileName, response);
     }
 
     private static void defaultExport(List<Map<String, Object>> list, String fileName, HttpServletResponse response) {
         Workbook workbook = ExcelExportUtil.exportExcel(list, ExcelType.HSSF);
-        if (workbook != null);
+        if (workbook != null) ;
         downLoadExcel(fileName, response, workbook);
     }
 
-    public static <T> List<T> importExcel(String filePath,Integer titleRows,Integer headerRows, Class<T> pojoClass){
-        if (StringUtils.isBlank(filePath)){
+    public static <T> List<T> importExcel(String filePath, Integer titleRows, Integer headerRows, Class<T> pojoClass) {
+        if (StringUtils.isBlank(filePath)) {
             return null;
         }
         ImportParams params = new ImportParams();
@@ -186,7 +210,7 @@ public class EasyExcelUtils extends EasyExcel {
         List<T> list = null;
         try {
             list = ExcelImportUtil.importExcel(new File(filePath), pojoClass, params);
-        }catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             throw new RuntimeException("模板不能为空");
         } catch (Exception e) {
             e.printStackTrace();
@@ -194,8 +218,9 @@ public class EasyExcelUtils extends EasyExcel {
         }
         return list;
     }
-    public static <T> List<T> importExcel(MultipartFile file, Integer titleRows, Integer headerRows, Class<T> pojoClass){
-        if (file == null){
+
+    public static <T> List<T> importExcel(MultipartFile file, Integer titleRows, Integer headerRows, Class<T> pojoClass) {
+        if (file == null) {
             return null;
         }
         ImportParams params = new ImportParams();
@@ -204,7 +229,7 @@ public class EasyExcelUtils extends EasyExcel {
         List<T> list = null;
         try {
             list = ExcelImportUtil.importExcel(file.getInputStream(), pojoClass, params);
-        }catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             throw new RuntimeException("excel文件不能为空");
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
