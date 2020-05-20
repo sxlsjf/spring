@@ -1,6 +1,10 @@
 package com.mygroup.sxl.service.impl;
 
 import com.mygroup.sxl.service.IHelloService;
+import com.mygroup.sxl.utils.EasyExcelUtils;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @Author: shenxl
@@ -8,6 +12,7 @@ import com.mygroup.sxl.service.IHelloService;
  * @Version 1.0
  * @description：${description}
  */
+@Service
 public class HelloServiceImpl implements IHelloService {
     @Override
     public void sayHello(String say) {
@@ -19,5 +24,10 @@ public class HelloServiceImpl implements IHelloService {
     @Override
     public void eat(String apple) {
         System.out.println("eat"+apple);
+    }
+
+    @Override
+    public void exportExcel(HttpServletResponse response) {
+       // EasyExcelUtils.pageWrite(response.getOutputStream(),);
     }
 }
